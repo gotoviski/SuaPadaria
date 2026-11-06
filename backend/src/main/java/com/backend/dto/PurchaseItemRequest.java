@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record PurchaseItemRequest(
 
+	Long purchaseId,
+
 	@NotNull(message = "Produto é obrigatório")
 	Long productId,
 

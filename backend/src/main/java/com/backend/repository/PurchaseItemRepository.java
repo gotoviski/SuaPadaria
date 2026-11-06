@@ -14,4 +14,6 @@ public interface PurchaseItemRepository extends JpaRepository<PurchaseItem, Long
 
 	List<PurchaseItem> findByProductIdOrderByPurchasePurchaseDateDesc(Long productId);
 
+	List<PurchaseItem> findByProductNameContainingIgnoreCaseOrderByProductName(String name);
+
 }
