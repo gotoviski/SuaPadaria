@@ -25,6 +25,8 @@ public interface UserService {
 
 	UserResponse update(Long id, UpdateUserRequest request);
 
+	UserResponse assignProfile(Long id, Long profileId);
+
 	void delete(Long id);
 
 }

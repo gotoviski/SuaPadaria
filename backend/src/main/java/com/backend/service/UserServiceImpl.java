@@ -17,8 +17,10 @@ import com.backend.dto.RegisterRequest;
 import com.backend.dto.ResetPasswordRequest;
 import com.backend.dto.UpdateUserRequest;
 import com.backend.dto.UserResponse;
+import com.backend.entity.AccessProfile;
 import com.backend.entity.PasswordResetToken;
 import com.backend.entity.User;
+import com.backend.repository.AccessProfileRepository;
 import com.backend.repository.PasswordResetTokenRepository;
 import com.backend.repository.UserRepository;
 
@@ -30,14 +32,16 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordResetTokenRepository tokenRepository;
+	private final AccessProfileRepository profileRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final SmsService smsService;
 	private final SecureRandom random = new SecureRandom();
 
 	public UserServiceImpl(UserRepository userRepository, PasswordResetTokenRepository tokenRepository,
-			PasswordEncoder passwordEncoder, SmsService smsService) {
+			AccessProfileRepository profileRepository, PasswordEncoder passwordEncoder, SmsService smsService) {
 		this.userRepository = userRepository;
 		this.tokenRepository = tokenRepository;
+		this.profileRepository = profileRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.smsService = smsService;
 	}
@@ -120,6 +124,20 @@ public class UserServiceImpl implements UserService {
 		}
 		if (request.password() != null && !request.password().isBlank()) {
 			user.setPassword(passwordEncoder.encode(request.password()));
+		}
+		return UserResponse.from(userRepository.save(user));
+	}
+
+	@Override
+	public UserResponse assignProfile(Long id, Long profileId) {
+		User user = getUser(id);
+		if (profileId == null) {
+			user.setAccessProfile(null);
+		} else {
+			AccessProfile profile = profileRepository.findById(profileId)
+					.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+							"Perfil de acesso não encontrado"));
+			user.setAccessProfile(profile);
 		}
 		return UserResponse.from(userRepository.save(user));
 	}

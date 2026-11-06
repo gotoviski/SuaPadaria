@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.dto.AssignProfileRequest;
 import com.backend.dto.UpdateUserRequest;
 import com.backend.dto.UserResponse;
 import com.backend.service.UserService;
@@ -40,6 +41,11 @@ public class UserController {
 	@PutMapping("/{id}")
 	public UserResponse update(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
 		return userService.update(id, request);
+	}
+
+	@PutMapping("/{id}/profile")
+	public UserResponse assignProfile(@PathVariable Long id, @RequestBody AssignProfileRequest request) {
+		return userService.assignProfile(id, request.profileId());
 	}
 
 	@DeleteMapping("/{id}")

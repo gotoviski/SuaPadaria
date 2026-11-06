@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
@@ -29,6 +31,10 @@ public class User {
 
 	@Column(nullable = false)
 	private String password;
+
+	@ManyToOne
+	@JoinColumn(name = "access_profile_id")
+	private AccessProfile accessProfile;
 
 	@Column(nullable = false, updatable = false)
 	private Instant createdAt;
@@ -76,6 +82,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public AccessProfile getAccessProfile() {
+		return accessProfile;
+	}
+
+	public void setAccessProfile(AccessProfile accessProfile) {
+		this.accessProfile = accessProfile;
 	}
 
 	public Instant getCreatedAt() {
