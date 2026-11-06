@@ -1,0 +1,236 @@
+.sidebar {
+  position: sticky;
+  top: 0;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--color-sidebar-bg);
+  color: var(--color-sidebar-text);
+  transition: width var(--transition-base), transform var(--transition-base);
+  overflow: hidden;
+  z-index: 40;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: var(--topbar-height);
+  padding: 0 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.logoMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.brandName {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-sidebar-text-active);
+  white-space: nowrap;
+}
+
+.nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px 10px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-sidebar-active) transparent;
+}
+
+.nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.nav::-webkit-scrollbar-thumb {
+  background: var(--color-sidebar-active);
+  border-radius: 3px;
+}
+
+.section + .section {
+  margin-top: 4px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 10px 6px;
+  border: none;
+  background: transparent;
+  color: var(--color-sidebar-text);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.sectionHeader:hover {
+  color: var(--color-sidebar-text-active);
+}
+
+.chevron {
+  transition: transform var(--transition-fast);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  margin: 1px 0;
+  border-radius: var(--radius-sm);
+  color: var(--color-sidebar-text);
+  text-decoration: none;
+  font-size: 13.5px;
+  white-space: nowrap;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.link:hover {
+  background: var(--color-sidebar-hover);
+  color: var(--color-sidebar-text-active);
+}
+
+.link.active {
+  background: var(--color-sidebar-active);
+  color: var(--color-sidebar-text-active);
+  font-weight: 500;
+}
+
+.link.active .linkIcon {
+  color: var(--color-primary);
+}
+
+.linkIcon {
+  flex-shrink: 0;
+}
+
+.footer {
+  padding: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.collapseBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-sidebar-text);
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.collapseBtn:hover {
+  background: var(--color-sidebar-hover);
+  color: var(--color-sidebar-text-active);
+}
+
+/* ---- Collapsed (icon-only) ---- */
+
+.collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+.collapsed .brand {
+  justify-content: center;
+  padding: 0;
+}
+
+.collapsed .brandName,
+.collapsed .sectionHeader,
+.collapsed .linkLabel {
+  display: none;
+}
+
+.collapsed .nav {
+  padding: 10px 8px 16px;
+}
+
+.collapsed .link,
+.collapsed .collapseBtn {
+  justify-content: center;
+  padding: 9px 0;
+}
+
+.collapsed .section {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 4px 0;
+}
+
+/* ---- Mobile (off-canvas) ---- */
+
+@media (max-width: 860px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: var(--sidebar-width);
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-md);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar .brandName,
+  .sidebar .sectionHeader,
+  .sidebar .linkLabel {
+    display: initial;
+  }
+
+  .sidebar .sectionHeader {
+    display: flex;
+  }
+
+  .sidebar .brand {
+    justify-content: flex-start;
+    padding: 0 18px;
+  }
+
+  .sidebar .link,
+  .sidebar .collapseBtn {
+    justify-content: flex-start;
+    padding: 8px 10px;
+  }
+
+  .footer {
+    display: none;
+  }
+}
