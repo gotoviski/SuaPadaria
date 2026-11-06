@@ -1,0 +1,137 @@
+package com.backend.entity;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDate;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "stock_batch")
+public class StockBatch {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "product_id")
+	private Product product;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "location_id")
+	private StorageLocation location;
+
+	@Column(nullable = false)
+	private String batchNumber;
+
+	@Column(precision = 10, scale = 3)
+	private BigDecimal quantity;
+
+	private LocalDate manufactureDate;
+
+	private LocalDate expirationDate;
+
+	@Column(length = 1000)
+	private String notes;
+
+	@Column(nullable = false, updatable = false)
+	private Instant createdAt;
+
+	@Column(nullable = false)
+	private Instant updatedAt;
+
+	@PrePersist
+	void onCreate() {
+		this.createdAt = Instant.now();
+		this.updatedAt = this.createdAt;
+	}
+
+	@PreUpdate
+	void onUpdate() {
+		this.updatedAt = Instant.now();
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+	public StorageLocation getLocation() {
+		return location;
+	}
+
+	public void setLocation(StorageLocation location) {
+		this.location = location;
+	}
+
+	public String getBatchNumber() {
+		return batchNumber;
+	}
+
+	public void setBatchNumber(String batchNumber) {
+		this.batchNumber = batchNumber;
+	}
+
+	public BigDecimal getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(BigDecimal quantity) {
+		this.quantity = quantity;
+	}
+
+	public LocalDate getManufactureDate() {
+		return manufactureDate;
+	}
+
+	public void setManufactureDate(LocalDate manufactureDate) {
+		this.manufactureDate = manufactureDate;
+	}
+
+	public LocalDate getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(LocalDate expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	public Instant getCreatedAt() {
+		return createdAt;
+	}
+
+	public Instant getUpdatedAt() {
+		return updatedAt;
+	}
+
+}
