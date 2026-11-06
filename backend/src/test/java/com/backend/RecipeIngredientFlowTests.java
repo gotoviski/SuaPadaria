@@ -1,0 +1,141 @@
+package com.backend;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+class RecipeIngredientFlowTests {
+
+	@Autowired
+	MockMvc mvc;
+
+	private final ObjectMapper objectMapper = new ObjectMapper();
+
+	@Test
+	void recipeIngredientCrud() throws Exception {
+		long breadId = createProduct("Pão de Forma");
+		long flourId = createProduct("Farinha Branca");
+		long saltId = createProduct("Sal Refinado");
+		long recipeId = createRecipe(breadId, flourId);
+
+		String ingredient = """
+				{"recipeId": %d, "productId": %d, "quantity": 0.05}
+				""".formatted(recipeId, saltId);
+
+		MvcResult created = mvc.perform(post("/api/recipe-ingredients").contentType(MediaType.APPLICATION_JSON)
+						.content(ingredient))
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.id").exists())
+				.andExpect(jsonPath("$.recipeId").value(recipeId))
+				.andExpect(jsonPath("$.recipeProductName").value("Pão de Forma"))
+				.andExpect(jsonPath("$.productId").value(saltId))
+				.andExpect(jsonPath("$.productName").value("Sal Refinado"))
+				.andExpect(jsonPath("$.quantity").value(0.05))
+				.andReturn();
+		long id = readId(created);
+
+		mvc.perform(post("/api/recipe-ingredients").contentType(MediaType.APPLICATION_JSON)
+						.content(ingredient))
+				.andExpect(status().isConflict());
+
+		mvc.perform(get("/api/recipe-ingredients").param("recipeId", String.valueOf(recipeId)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.length()").value(2));
+
+		mvc.perform(get("/api/recipe-ingredients").param("productId", String.valueOf(saltId)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].id").value(id));
+
+		mvc.perform(get("/api/recipe-ingredients").param("search", "refinado"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].id").value(id));
+
+		mvc.perform(get("/api/recipe-ingredients/" + id))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.quantity").value(0.05));
+
+		String updated = """
+				{"recipeId": %d, "productId": %d, "quantity": 0.10}
+				""".formatted(recipeId, saltId);
+		mvc.perform(put("/api/recipe-ingredients/" + id).contentType(MediaType.APPLICATION_JSON)
+						.content(updated))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.quantity").value(0.10));
+
+		mvc.perform(delete("/api/recipe-ingredients/" + id)).andExpect(status().isNoContent());
+
+		mvc.perform(get("/api/recipe-ingredients/" + id)).andExpect(status().isNotFound());
+	}
+
+	@Test
+	void validationErrorsReturn400() throws Exception {
+		long breadId = createProduct("Pão Doce");
+		long sugarId = createProduct("Açúcar Cristal");
+		long recipeId = createRecipe(breadId, sugarId);
+
+		mvc.perform(post("/api/recipe-ingredients").contentType(MediaType.APPLICATION_JSON)
+						.content("{}"))
+				.andExpect(status().isBadRequest());
+
+		mvc.perform(post("/api/recipe-ingredients").contentType(MediaType.APPLICATION_JSON)
+						.content("{\"productId\": " + sugarId + ", \"quantity\": 1}"))
+				.andExpect(status().isBadRequest());
+
+		mvc.perform(post("/api/recipe-ingredients").contentType(MediaType.APPLICATION_JSON)
+						.content("{\"recipeId\": 999999, \"productId\": " + sugarId + ", \"quantity\": 1}"))
+				.andExpect(status().isBadRequest());
+
+		mvc.perform(post("/api/recipe-ingredients").contentType(MediaType.APPLICATION_JSON)
+						.content("{\"recipeId\": " + recipeId + ", \"productId\": 999999, \"quantity\": 1}"))
+				.andExpect(status().isBadRequest());
+
+		mvc.perform(post("/api/recipe-ingredients").contentType(MediaType.APPLICATION_JSON)
+						.content("{\"recipeId\": " + recipeId + ", \"productId\": " + sugarId + ", \"quantity\": 0}"))
+				.andExpect(status().isBadRequest());
+
+		mvc.perform(post("/api/recipe-ingredients").contentType(MediaType.APPLICATION_JSON)
+						.content("{\"recipeId\": " + recipeId + ", \"productId\": " + breadId + ", \"quantity\": 1}"))
+				.andExpect(status().isBadRequest());
+	}
+
+	private long createProduct(String name) throws Exception {
+		MvcResult result = mvc.perform(post("/api/products").contentType(MediaType.APPLICATION_JSON)
+						.content("{\"name\": \"%s\", \"price\": 5.50}".formatted(name)))
+				.andExpect(status().isCreated())
+				.andReturn();
+		return readId(result);
+	}
+
+	private long createRecipe(long productId, long ingredientProductId) throws Exception {
+		String recipe = """
+				{"productId": %d, "yieldQuantity": 10, "ingredients": [{"productId": %d, "quantity": 5}]}
+				""".formatted(productId, ingredientProductId);
+		MvcResult result = mvc.perform(post("/api/recipes").contentType(MediaType.APPLICATION_JSON)
+						.content(recipe))
+				.andExpect(status().isCreated())
+				.andReturn();
+		return readId(result);
+	}
+
+	private long readId(MvcResult result) throws Exception {
+		JsonNode node = objectMapper.readTree(result.getResponse().getContentAsString());
+		return node.get("id").asLong();
+	}
+
+}
