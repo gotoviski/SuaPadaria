@@ -38,6 +38,23 @@ function movement(id, productId, productName, locationId, locationName, batchId,
   };
 }
 
+function batch(id, productId, productName, locationId, locationName, batchNumber, quantity, manufactureDate, expirationDate) {
+  return {
+    id,
+    productId,
+    productName,
+    locationId,
+    locationName,
+    batchNumber,
+    quantity,
+    manufactureDate,
+    expirationDate,
+    notes: null,
+    createdAt: isoAt(-10),
+    updatedAt: isoAt(-1),
+  };
+}
+
 export function buildEstoqueMock() {
   return {
     stockBalances: [
@@ -67,9 +84,11 @@ export function buildEstoqueMock() {
     ],
 
     stockBatches: [
-      { id: 3, productId: 1, locationId: 1, batchNumber: 'LT-2025-09', expirationDate: '2026-05-20' },
-      { id: 4, productId: 9, locationId: 2, batchNumber: 'LT-LEITE-11', expirationDate: '2026-11-14' },
-      { id: 5, productId: 3, locationId: 2, batchNumber: 'LT-MANT-08', expirationDate: '2026-12-01' },
+      batch(3, 1, 'Farinha de trigo', 1, 'Depósito central', 'LT-2025-09', 38.5, '2025-11-20', '2026-05-20'),
+      batch(4, 9, 'Leite integral', 2, 'Câmara fria', 'LT-LEITE-11', 18.0, '2026-11-01', '2026-11-14'),
+      batch(5, 3, 'Manteiga', 2, 'Câmara fria', 'LT-MANT-08', 8.2, '2026-10-10', '2026-12-01'),
+      batch(6, 5, 'Fermento biológico', 2, 'Câmara fria', 'LT-FERM-07', 0, '2026-08-15', '2026-10-30'),
+      batch(7, 4, 'Chocolate em barra', 1, 'Depósito central', 'LT-CHOC-12', 5.75, '2026-09-01', '2027-03-01'),
     ],
 
     storageLocations: [
