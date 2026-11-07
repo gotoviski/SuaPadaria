@@ -55,6 +55,31 @@ function batch(id, productId, productName, locationId, locationName, batchNumber
   };
 }
 
+function invItem(id, productId, productName, expectedQuantity, countedQuantity) {
+  return {
+    id,
+    productId,
+    productName,
+    expectedQuantity,
+    countedQuantity,
+    difference: countedQuantity - expectedQuantity,
+  };
+}
+
+function inventory(id, locationId, locationName, inventoryDate, status, notes, items) {
+  return {
+    id,
+    locationId,
+    locationName,
+    inventoryDate,
+    status,
+    notes,
+    items,
+    createdAt: inventoryDate,
+    updatedAt: inventoryDate,
+  };
+}
+
 export function buildEstoqueMock() {
   return {
     stockBalances: [
@@ -81,6 +106,19 @@ export function buildEstoqueMock() {
       movement(14, 1, 'Farinha de trigo', 1, 'Depósito central', 3, 'LT-2025-09', 'ENTRY', 50, 'Compra', 'NF-5538', isoAt(-2, 9, 40)),
       movement(13, 3, 'Manteiga', 2, 'Câmara fria', null, null, 'ADJUSTMENT', 2, 'Ajuste de inventário', 'INV-118', isoAt(-2, 18, 0)),
       movement(12, 4, 'Chocolate em barra', 1, 'Depósito central', null, null, 'ENTRY', 6, 'Compra', 'NF-5522', isoAt(-3, 10, 15)),
+    ],
+
+    inventories: [
+      inventory(118, 1, 'Depósito central', isoAt(-2, 18, 0), 'CLOSED', 'Contagem mensal de insumos', [
+        invItem(301, 1, 'Farinha de trigo', 50.0, 48.5),
+        invItem(302, 2, 'Açúcar refinado', 22.0, 22.0),
+        invItem(303, 4, 'Chocolate em barra', 6.0, 5.75),
+      ]),
+      inventory(119, 3, 'Balcão', isoAt(0, 6, 30), 'OPEN', null, [
+        invItem(304, 6, 'Pão francês', 120, 120),
+        invItem(305, 7, 'Croissant', 40, 34),
+        invItem(306, 8, 'Pão de queijo', 25, 0),
+      ]),
     ],
 
     stockBatches: [

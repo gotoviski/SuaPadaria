@@ -2,6 +2,14 @@
   --caixa-primary: var(--color-primary);
   --caixa-primary-hover: var(--color-primary-hover);
   --caixa-primary-soft: var(--color-primary-soft);
+
+  --bs-primary: var(--color-primary);
+  --bs-primary-rgb: 180, 83, 9;
+  --bs-primary-text-emphasis: var(--color-primary-hover);
+  --bs-primary-bg-subtle: var(--color-primary-soft);
+  --bs-primary-border-subtle: #f0d9b5;
+  --bs-link-color: var(--color-primary);
+  --bs-link-hover-color: var(--color-primary-hover);
 }
 
 .bs :global(.card) {
@@ -33,6 +41,17 @@
   --bs-btn-disabled-color: #fff;
   --bs-btn-disabled-bg: var(--caixa-primary);
   --bs-btn-disabled-border-color: var(--caixa-primary);
+}
+
+.bs :global(.btn-outline-primary) {
+  --bs-btn-color: var(--caixa-primary);
+  --bs-btn-border-color: var(--caixa-primary);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--caixa-primary);
+  --bs-btn-hover-border-color: var(--caixa-primary);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--caixa-primary-hover);
+  --bs-btn-active-border-color: var(--caixa-primary-hover);
 }
 
 .bs :global(.form-control:focus),
