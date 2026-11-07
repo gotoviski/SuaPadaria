@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { api } from '../../services/api';
 import { buildCaixaMock } from '../../mocks/caixaMock';
 import Icon from '../../components/Icons/Icons';
-import styles from './CaixaPage.module.css';
+import Modal from '../../components/Modal/Modal';
+import styles from '../../styles/bsTheme.module.css';
 
 const ENDPOINTS = {
   cashRegisters: '/cash-registers',
@@ -21,38 +22,6 @@ const clockFmt = new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-
 
 const toNumber = (value) => Number(value) || 0;
 const parseAmount = (value) => Number(String(value).replace(',', '.')) || 0;
-
-function Modal({ title, icon, onClose, children, footer, wide }) {
-  return (
-    <>
-      <div className="modal-backdrop fade show" onClick={onClose} />
-      <div
-        className="modal fade show d-block"
-        tabIndex="-1"
-        role="dialog"
-        aria-modal="true"
-        onClick={onClose}
-      >
-        <div
-          className={`modal-dialog modal-dialog-centered ${wide ? 'modal-lg' : ''}`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title d-flex align-items-center gap-2">
-                <Icon name={icon} size={18} />
-                {title}
-              </h5>
-              <button type="button" className="btn-close" aria-label="Fechar" onClick={onClose} />
-            </div>
-            <div className="modal-body">{children}</div>
-            {footer && <div className="modal-footer">{footer}</div>}
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
 
 export default function CaixaPage() {
   const [data, setData] = useState(null);
@@ -271,7 +240,7 @@ export default function CaixaPage() {
   }
 
   return (
-    <div className={styles.caixa}>
+    <div className={styles.bs}>
       <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
         <div>
           <h1 className="h4 mb-1 fw-semibold">Caixa</h1>

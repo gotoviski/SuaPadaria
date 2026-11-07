@@ -1,26 +1,26 @@
-.caixa {
+.bs {
   --caixa-primary: var(--color-primary);
   --caixa-primary-hover: var(--color-primary-hover);
   --caixa-primary-soft: var(--color-primary-soft);
 }
 
-.caixa :global(.card) {
+.bs :global(.card) {
   border-color: var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
 }
 
-.caixa :global(.card-header) {
+.bs :global(.card-header) {
   background: var(--color-surface);
   border-bottom-color: var(--color-border);
   padding: 12px 16px;
 }
 
-.caixa :global(.card-body) {
+.bs :global(.card-body) {
   padding: 16px;
 }
 
-.caixa :global(.btn-primary) {
+.bs :global(.btn-primary) {
   --bs-btn-color: #fff;
   --bs-btn-bg: var(--caixa-primary);
   --bs-btn-border-color: var(--caixa-primary);
@@ -35,18 +35,28 @@
   --bs-btn-disabled-border-color: var(--caixa-primary);
 }
 
-.caixa :global(.form-control:focus),
-.caixa :global(.form-select:focus) {
+.bs :global(.form-control:focus),
+.bs :global(.form-select:focus) {
   border-color: var(--caixa-primary);
   box-shadow: 0 0 0 3px var(--caixa-primary-soft);
 }
 
-.caixa :global(.table) {
+.bs :global(.form-check-input:checked) {
+  background-color: var(--caixa-primary);
+  border-color: var(--caixa-primary);
+}
+
+.bs :global(.form-check-input:focus) {
+  border-color: var(--caixa-primary);
+  box-shadow: 0 0 0 3px var(--caixa-primary-soft);
+}
+
+.bs :global(.table) {
   --bs-table-hover-bg: var(--color-bg);
   font-size: 13.5px;
 }
 
-.caixa :global(.table > thead > tr > th) {
+.bs :global(.table > thead > tr > th) {
   font-size: 11.5px;
   font-weight: 600;
   color: var(--color-text-muted);
@@ -56,7 +66,7 @@
   white-space: nowrap;
 }
 
-.caixa :global(.table > tbody > tr > td) {
+.bs :global(.table > tbody > tr > td) {
   border-bottom-color: var(--color-border);
   white-space: nowrap;
 }
@@ -93,11 +103,11 @@
   border: 1px solid var(--color-border);
 }
 
-.caixa :global(.modal-content) {
+.bs :global(.modal-content) {
   border-radius: var(--radius-md);
   border-color: var(--color-border);
 }
 
-.caixa :global(.badge) {
+.bs :global(.badge) {
   font-weight: 600;
 }
