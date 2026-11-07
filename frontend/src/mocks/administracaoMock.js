@@ -120,5 +120,13 @@ export function buildAdministracaoMock() {
     ],
 
     accessProfiles,
+
+    permissions: [
+      'COMPANY_VIEW', 'COMPANY_MANAGE', 'USERS_VIEW', 'USERS_MANAGE', 'PROFILES_VIEW',
+      'PROFILES_MANAGE', 'PRODUCTS_VIEW', 'PRODUCTS_MANAGE', 'PRICE_TABLES_VIEW',
+      'PRICE_TABLES_MANAGE', 'CUSTOMERS_VIEW', 'CUSTOMERS_MANAGE', 'ORDERS_VIEW',
+      'ORDERS_MANAGE', 'SALES_VIEW', 'SALES_MANAGE', 'STOCK_VIEW', 'STOCK_MANAGE',
+      'REPORTS_VIEW',
+    ],
   };
 }
